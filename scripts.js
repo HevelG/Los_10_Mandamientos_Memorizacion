@@ -79,6 +79,9 @@ const BG_COLORS = [
   [240, 182, 92],  // cobre claro
   [255, 255, 245], // blanco cálido
 ];
+// Fases aleatorias para el movimiento del halo dorado
+const ORBIT_PHASE_X = Math.random() * Math.PI * 2;
+const ORBIT_PHASE_Y = Math.random() * Math.PI * 2;
 const MAP_DEFAULT_SCALE = .3;
 const MAP_MAX_SCALE = 2.2;
 const MAP_ZOOM_STEP = 0.12;
@@ -131,58 +134,56 @@ const ensureBgCanvasSize = () => {
 const drawBgFrame = (timestamp = 0) => {
   if (!ensureBgCanvas() || !bgCtx) return;
   ensureBgCanvasSize();
+
   const width = Math.max(window.innerWidth, 1);
   const height = Math.max(window.innerHeight, 1);
-  const t = timestamp * 0.001; // tiempo en segundos para animaciones suaves
-  // Fondo base oscuro profundo
+
+  // Tiempo base: ligeramente más rápido que 0.001 pero sigue siendo suave
+  const t = timestamp * 0.0012; // antes 0.001
+
+  // Fondo base oscuro neutro
   bgCtx.globalCompositeOperation = "source-over";
   bgCtx.globalAlpha = 1;
   bgCtx.fillStyle = "#0b0910";
   bgCtx.fillRect(0, 0, width, height);
-  // Vignette suave para mantener el foco en el contenido
-  const vignetteRadius = Math.max(width, height) * 0.8;
-  const vignette = bgCtx.createRadialGradient(
-    width * 0.5,
-    height * 0.55,
-    0,
-    width * 0.5,
-    height * 0.55,
-    vignetteRadius
-  );
-  vignette.addColorStop(0, "rgba(0, 0, 0, 0)");
-  vignette.addColorStop(1, "rgba(0, 0, 0, 0.55)");
-  bgCtx.fillStyle = vignette;
-  bgCtx.fillRect(0, 0, width, height);
-  // Halo dorado que se desplaza lentamente (corona de luz)
-  const orbitX = width * 0.5 + Math.cos(t * 0.08) * width * 0.18;
-  const orbitY = height * 0.42 + Math.sin(t * 0.06) * height * 0.14;
-  const haloRadius = Math.min(width, height) * 0.55;
-  const halo = bgCtx.createRadialGradient(orbitX, orbitY, 0, orbitX, orbitY, haloRadius);
-  halo.addColorStop(0, "rgba(255, 244, 220, 0.30)");
-  halo.addColorStop(0.25, "rgba(243, 210, 124, 0.38)");
-  halo.addColorStop(0.55, "rgba(243, 210, 124, 0.12)");
-  halo.addColorStop(1, "rgba(243, 210, 124, 0)");
-  bgCtx.fillStyle = halo;
-  bgCtx.fillRect(0, 0, width, height);
-  // Bandas de luz diagonales y suaves
-  const drawLightBand = (angleRad, phase, thickness, strength) => {
-    const diag = Math.sqrt(width * width + height * height);
-    const offset = Math.sin(t * 0.05 + phase) * diag * 0.15;
-    const grad = bgCtx.createLinearGradient(-diag, 0, diag, 0);
-    grad.addColorStop(0, "rgba(255, 245, 232, 0)");
-    grad.addColorStop(0.42, `rgba(255, 245, 232, ${0.03 * strength})`);
-    grad.addColorStop(0.5, `rgba(243, 210, 124, ${0.16 * strength})`);
-    grad.addColorStop(0.58, `rgba(255, 245, 232, ${0.05 * strength})`);
-    grad.addColorStop(1, "rgba(255, 245, 232, 0)");
-    bgCtx.save();
-    bgCtx.translate(width * 0.5, height * 0.5);
-    bgCtx.rotate(angleRad);
-    bgCtx.fillStyle = grad;
-    bgCtx.fillRect(-diag + offset, -thickness * 0.5, diag * 2, thickness);
-    bgCtx.restore();
-  };
-  drawLightBand(Math.PI / 4.2, 0, Math.max(width, height) * 0.22, 1);
-  drawLightBand(-Math.PI / 3.6, 1.4, Math.max(width, height) * 0.16, 0.75);
+
+  // Círculo dorado cálido en movimiento lento (un poco más rápido y con fase aleatoria)
+  const radius = Math.min(width, height) * 0.42;
+  const orbitAmpX = width * 0.24;  // antes 0.22
+  const orbitAmpY = height * 0.24; // antes 0.22
+
+  // Usamos fases aleatorias para que el inicio y trayectoria varíen por sesión
+  const phaseX = t * 1.05 + ORBIT_PHASE_X; // antes t * 0.9
+  const phaseY = t * 1.18 + ORBIT_PHASE_Y; // antes t * 1.05
+
+  const x = width / 2 + Math.cos(phaseX) * orbitAmpX;
+  const y = height / 2 + Math.sin(phaseY) * orbitAmpY;
+
+  const grad = bgCtx.createRadialGradient(x, y, 0, x, y, radius);
+  grad.addColorStop(0, "rgba(255, 206, 120, 0.92)");
+  grad.addColorStop(0.45, "rgba(244, 188, 96, 0.55)");
+  grad.addColorStop(1, "rgba(240, 180, 90, 0)");
+
+  bgCtx.fillStyle = grad;
+  bgCtx.beginPath();
+  bgCtx.arc(x, y, radius, 0, Math.PI * 2);
+  bgCtx.fill();
+
+  // Banda diagonal blanco a negro con desplazamiento lento
+  const offset = (Math.sin(t * 0.6) + 1) * width * 0.25;
+  const stripeGrad = bgCtx.createLinearGradient(-width, 0, width * 2, height);
+  stripeGrad.addColorStop(0, "rgba(0, 0, 0, 0)");
+  stripeGrad.addColorStop(0.35, "rgba(255, 255, 255, 0.08)");
+  stripeGrad.addColorStop(0.5, "rgba(255, 255, 255, 0.2)");
+  stripeGrad.addColorStop(0.65, "rgba(0, 0, 0, 0.25)");
+  stripeGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+
+  bgCtx.save();
+  bgCtx.translate(offset, 0);
+  bgCtx.fillStyle = stripeGrad;
+  bgCtx.fillRect(-width, 0, width * 2, height);
+  bgCtx.restore();
+
   requestAnimationFrame(drawBgFrame);
 };
 const initDynamicBackground = () => {
