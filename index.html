@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tarjetas de los 10 Mandamientos</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="background-layer" id="backgroundLayer">
+      <canvas id="bgCanvas" aria-hidden="true"></canvas>
+    </div>
+    <div class="page-shell" id="pageShell">
+      <div class="info-row">
+        <section class="info-column">
+          <aside class="verse-panel" aria-live="polite">
+            <div class="verse-panel__content" id="verseContent">
+              <div class="verse-panel__reference" id="verseReference"></div>
+              <p id="verseText"></p>
+            </div>
+          </aside>
+        </section>
+      </div>
+
+      <main class="carousel-section">
+        <section class="carousel" aria-live="polite">
+          <div class="carousel-track" id="carouselTrack"></div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="view-toggle-footer">
+      <button id="viewToggleBtn" type="button" aria-pressed="false">
+        Cambiar a Mapa
+      </button>
+    </footer>
+
+    <script src="scripts.js" defer></script>
+  </body>
+</html>

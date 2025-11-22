@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mapa mental - 10 Mandamientos</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="map-page">
+    <main class="map-view" aria-label="Mapa mental de los 10 Mandamientos">
+      <div class="map-viewport" id="mapViewport">
+        <img
+          src="Imagenes/Los_10_Mandamientos.jpg"
+          alt="Mapa mental de los 10 Mandamientos"
+          class="map-image"
+          id="mapImage"
+        />
+      </div>
+    </main>
+
+    <div class="map-zoom-controls map-zoom-controls--fixed">
+      <button type="button" id="zoomInBtn" aria-label="Acercar mapa">+</button>
+      <button type="button" id="zoomOutBtn" aria-label="Alejar mapa">-</button>
+    </div>
+
+    <footer class="view-toggle-footer">
+      <button id="backToCardsBtn" type="button">Cambiar a Tarjetas</button>
+    </footer>
+
+    <script src="mapa.js" defer></script>
+  </body>
+</html>
