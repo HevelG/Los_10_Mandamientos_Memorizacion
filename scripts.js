@@ -366,9 +366,6 @@ const renderCarousel = () => {
     img.src = cardData.image;
     img.alt = cardData.reference;
     card.appendChild(img);
-    const label = document.createElement("div");
-    label.className = "carousel-card__label";
-    label.textContent = cardData.citation || "";
     card.addEventListener("click", (event) => {
       if (cardIndex === selectedIndex) {
         event.preventDefault();
@@ -378,7 +375,10 @@ const renderCarousel = () => {
       handleCardSelection(cardIndex);
     });
     wrapper.appendChild(card);
-    wrapper.appendChild(label);
+    const caption = document.createElement("p");
+    caption.className = "carousel-card__caption";
+    caption.textContent = cardData.citation || cardData.reference;
+    wrapper.appendChild(caption);
     if (cardIndex === selectedIndex) {
       const expandButton = document.createElement("button");
       expandButton.type = "button";
