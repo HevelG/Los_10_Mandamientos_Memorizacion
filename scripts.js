@@ -1,53 +1,63 @@
 const verseCards = [
   {
     reference: "Primer Mandamiento:",
-    text: "No tendrás dioses ajenos delante de mí.",
+    text: "No tendras dioses ajenos delante de mi.",
     image: "Imagenes/1.jpg",
+    citation: "Exodo 20:3",
   },
   {
     reference: "Segundo Mandamiento:",
-    text: "No te harás imagen, ni te inclinarás ante otros dioses.",
+    text: "No te haras imagen, ni te inclinaras ante otros dioses.",
     image: "Imagenes/2.jpg",
+    citation: "Exodo 20:4-5",
   },
   {
     reference: "Tercer Mandamiento:",
-    text: "No tomarás el nombre de Dios en vano.",
+    text: "No tomaras el nombre de Dios en vano.",
     image: "Imagenes/3.jpg",
+    citation: "Exodo 20:7",
   },
   {
     reference: "Cuarto Mandamiento:",
-    text: "Acuérdate del día de reposo para santificarlo.",
+    text: "Acuardate del dia de reposo para santificarlo.",
     image: "Imagenes/4.jpg",
+    citation: "Exodo 20:8-11",
   },
   {
     reference: "Quinto Mandamiento:",
     text: "Honra a tu padre y a tu madre.",
     image: "Imagenes/5.jpg",
+    citation: "Exodo 20:12",
   },
   {
     reference: "Sexto Mandamiento:",
-    text: "No matarás.",
+    text: "No mataras.",
     image: "Imagenes/6.jpg",
+    citation: "Exodo 20:13",
   },
   {
-    reference: "Séptimo Mandamiento:",
-    text: "No cometerás adulterio.",
+    reference: "Septimo Mandamiento:",
+    text: "No cometeras adulterio.",
     image: "Imagenes/7.jpg",
+    citation: "Exodo 20:14",
   },
   {
     reference: "Octavo Mandamiento:",
-    text: "No hurtarás.",
+    text: "No hurtaras.",
     image: "Imagenes/8.jpg",
+    citation: "Exodo 20:15",
   },
   {
     reference: "Noveno Mandamiento:",
-    text: "No darás falso testimonio contra tu prójimo.",
+    text: "No daras falso testimonio contra tu projimo.",
     image: "Imagenes/9.jpg",
+    citation: "Exodo 20:16",
   },
   {
-    reference: "Décimo Mandamiento:",
-    text: "No codiciarás lo que no es tuyo.",
+    reference: "Decimo Mandamiento:",
+    text: "No codiciaras lo que no es tuyo.",
     image: "Imagenes/10.jpg",
+    citation: "Exodo 20:17",
   },
 ];
 const verseReferenceEl = document.getElementById("verseReference");
@@ -356,6 +366,9 @@ const renderCarousel = () => {
     img.src = cardData.image;
     img.alt = cardData.reference;
     card.appendChild(img);
+    const label = document.createElement("div");
+    label.className = "carousel-card__label";
+    label.textContent = cardData.citation || "";
     card.addEventListener("click", (event) => {
       if (cardIndex === selectedIndex) {
         event.preventDefault();
@@ -365,6 +378,7 @@ const renderCarousel = () => {
       handleCardSelection(cardIndex);
     });
     wrapper.appendChild(card);
+    wrapper.appendChild(label);
     if (cardIndex === selectedIndex) {
       const expandButton = document.createElement("button");
       expandButton.type = "button";

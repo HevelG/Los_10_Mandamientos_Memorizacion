@@ -366,7 +366,10 @@ body {
 .carousel-card-wrapper {
   position: relative;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  gap: 0.35rem;
 }
 
 .carousel-card__caption {
@@ -381,6 +384,17 @@ body {
   letter-spacing: 0.02em;
   text-align: center;
   white-space: nowrap;
+}
+
+.carousel-card__label {
+  margin: 0;
+  font-size: clamp(0.78rem, 1.5vw, 0.96rem);
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+  line-height: 1.3;
+  pointer-events: none;
 }
 
 .expand-button {
